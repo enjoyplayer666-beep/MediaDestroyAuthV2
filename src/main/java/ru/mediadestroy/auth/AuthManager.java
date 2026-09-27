@@ -87,7 +87,7 @@ public class AuthManager {
 
         showScreenCommand(player);
 
-        BukkitRunnable cycleTask = new BukkitRunnable() {
+        BukkitTask cycleTask = new BukkitRunnable() {
             int elapsedTicks = 0;
             boolean showingCommandScreen = true;
 
