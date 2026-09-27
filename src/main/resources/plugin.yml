@@ -1,0 +1,21 @@
+name: MediaDestroyAuth
+version: '1.0.0'
+main: ru.mediadestroy.auth.MediaDestroyAuth
+api-version: '1.21'
+author: MediaDestroy
+description: Авторизация/регистрация для сервера MediaDestroy
+
+commands:
+  l:
+    description: Регистрация или вход по паролю
+    usage: /l <пароль>
+    aliases: [login, log, reg]
+  mdauth:
+    description: Служебные команды MediaDestroyAuth
+    usage: /mdauth reload
+    permission: mediadestroyauth.admin
+    permission-message: Недостаточно прав.
+
+permissions:
+  mediadestroyauth.admin:
+    default: op
