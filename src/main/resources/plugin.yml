@@ -10,6 +10,10 @@ commands:
     description: Регистрация или вход по паролю
     usage: /l <пароль>
     aliases: [login, log, reg]
+  changepassword:
+    description: Смена пароля
+    usage: /changepassword <старый пароль> <новый пароль>
+    aliases: [changepass, cp]
   mdauth:
     description: Служебные команды MediaDestroyAuth
     usage: /mdauth reload

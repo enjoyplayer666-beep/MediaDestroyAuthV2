@@ -34,7 +34,8 @@ public class PlayerDataStore {
                     String hash = yaml.getString("players." + key + ".hash");
                     String salt = yaml.getString("players." + key + ".salt");
                     long lastLogin = yaml.getLong("players." + key + ".lastLogin", 0L);
-                    records.put(uuid, new PlayerRecord(hash, salt, lastLogin));
+                    String lastIp = yaml.getString("players." + key + ".lastIp");
+                    records.put(uuid, new PlayerRecord(hash, salt, lastLogin, lastIp));
                 } catch (IllegalArgumentException ex) {
                     logger.warning("Некорректный UUID в players.yml: " + key);
                 }
@@ -49,6 +50,7 @@ public class PlayerDataStore {
             yaml.set(path + ".hash", entry.getValue().getHash());
             yaml.set(path + ".salt", entry.getValue().getSalt());
             yaml.set(path + ".lastLogin", entry.getValue().getLastLogin());
+            yaml.set(path + ".lastIp", entry.getValue().getLastIp());
         }
         try {
             yaml.save(file);

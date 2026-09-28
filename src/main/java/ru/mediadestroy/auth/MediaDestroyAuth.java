@@ -2,6 +2,7 @@ package ru.mediadestroy.auth;
 
 import org.bukkit.plugin.java.JavaPlugin;
 import ru.mediadestroy.auth.commands.AdminCommand;
+import ru.mediadestroy.auth.commands.ChangePasswordCommand;
 import ru.mediadestroy.auth.commands.LoginCommand;
 import ru.mediadestroy.auth.listeners.JoinListener;
 import ru.mediadestroy.auth.listeners.RestrictionListener;
@@ -26,6 +27,9 @@ public class MediaDestroyAuth extends JavaPlugin {
 
         getCommand("l").setExecutor(new LoginCommand(authManager));
         getCommand("mdauth").setExecutor(new AdminCommand(this));
+        ChangePasswordCommand changePassword = new ChangePasswordCommand(this, authManager);
+        getCommand("changepassword").setExecutor(changePassword);
+        getCommand("changepassword").setTabCompleter(changePassword);
 
         getLogger().info("MediaDestroyAuth включён.");
     }

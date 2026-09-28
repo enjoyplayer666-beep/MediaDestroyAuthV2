@@ -22,9 +22,9 @@ public class JoinListener implements Listener {
         event.setJoinMessage(null);
         var player = event.getPlayer();
 
-        if (authManager.hasValidSession(player.getUniqueId())) {
-            // Сессия ещё активна (менее часа с последнего входа) — пароль не нужен
-            authManager.finishAuthSuccess(player, true);
+        if (authManager.hasValidSession(player)) {
+            // Сессия ещё активна (менее часа с последнего входа, тот же IP) — пароль не нужен
+            authManager.finishAuthSuccess(player, AuthManager.Entry.SESSION);
             return;
         }
 

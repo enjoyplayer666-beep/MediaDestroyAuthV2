@@ -1,8 +1,8 @@
 # ============================================
 #  MediaDestroyAuth — конфигурация
 #  Цветовые коды — стандартные Minecraft (&).
-#  Строки с <gradient:...> — MiniMessage. Тег <center> в начале строки
-#  (только в chat-welcome-*) центрирует строку в чате — обрабатывается кодом плагина.
+#  Строки с <...> — MiniMessage. Тег <center> в начале строки
+#  (только в welcome.*) центрирует строку в чате — обрабатывается кодом плагина.
 # ============================================
 
 server-name: "MediaDestroy"
@@ -21,18 +21,50 @@ timing:
 bossbar:
   color: YELLOW
   style: SOLID
-  # {time} — оставшиеся секунды, {cmd} — команда входа
+  # {time} — оставшиеся секунды
   text: "&c[!] &fВведите пароль: &6/l пароль &7({time}s)"
+  # для тех, кто ещё ни разу не заходил
+  text-register: "&c[!] &fПридумайте пароль: &6/reg пароль &7({time}s)"
+  # после первого ввода при регистрации
+  text-confirm: "&c[!] &fПовторите пароль ещё раз &7({time}s)"
 
-# --- Экран 1 ---
+# --- Экран 1 (вход) ---
 screen-command:
   title: "&6&lВведите пароль"
   subtitle: "&fВведите команду &6/l пароль"
 
-# --- Экран 2 ---
+# --- Экран 2 (вход) ---
 screen-chat:
   title: "&6&lИли просто"
   subtitle: "&fнапишите пароль в чат"
+
+# --- Регистрация: для тех, кто ещё ни разу не заходил на сервер ---
+screen-register-command:
+  title: "&6&lРегистрация"
+  subtitle: "&fПридумайте пароль: &6/reg пароль"
+screen-register-chat:
+  title: "&6&lИли просто"
+  subtitle: "&fнапишите новый пароль в чат"
+# после первого ввода - повтор пароля
+screen-register-confirm:
+  title: "&6&lПовторите пароль"
+  subtitle: "&fнапишите его ещё раз в чат или &6/reg пароль"
+
+register:
+  # спрашивать пароль второй раз (защита от опечатки)
+  confirm-password: true
+  min-length: 4
+  max-length: 32
+  bad-length-message: "&c&l[!] &cПароль должен быть от {min} до {max} символов."
+  mismatch-message: "&c&l[!] &cПароли не совпадают! Придумайте пароль заново."
+
+# Смена пароля: /changepassword <старый> <новый> (/changepass, /cp)
+change-password:
+  usage-message: "&cИспользование: &6/changepassword <старый пароль> <новый пароль>"
+  wrong-old-message: "&c&l[!] &cСтарый пароль введён неверно."
+  same-message: "&c&l[!] &cНовый пароль совпадает со старым."
+  not-registered-message: "&c&l[!] &cВы ещё не зарегистрированы."
+  success-message: "&a&l[✓] &aПароль успешно изменён!"
 
 # --- Экран 3 (появляется сразу после ввода пароля) ---
 screen-checking:
@@ -58,25 +90,27 @@ kick-message: "&c&lВремя авторизации истекло!\n&7Зайд
 # Приветственные сообщения в чат
 # ============================================
 
-# Отправляется, только когда игрок реально ввёл пароль
-# (обычный логин командой/чатом ИЛИ первая регистрация).
 # <center> в начале строки — центрирует её в чате.
-chat-welcome-login:
-  - "<center><gradient:yellow:gold><b>MediaDestroy</b></gradient>"
-  - "<center>&fДобро пожаловать на сервер!"
-  - "<center>&fГруппа Вконтакте: &evk.com/mediadestroy"
-  - "<center>&fОнлайн магазин: &emediadestroy.ru"
-  - "<center>&fНаш ТГ канал: &et.me/mediadestroy"
-  - ""
-  - "<center>&c&l[!] &cВаш аккаунт уязвим!"
-  - "<center>&eПривяжите его, чтобы избежать взлома!"
-  - "<center>&eНажмите &eсюда для просмотра вариантов (&f/link&e)."
-
-# Отправляется, когда игрок зашёл БЕЗ пароля по активной сессии
-# (пароль не запрашивался — предупреждение про уязвимость не показываем).
-chat-welcome-session:
-  - "<center><gradient:yellow:gold><b>MediaDestroy</b></gradient>"
-  - "<center>&fДобро пожаловать на сервер!"
-  - "<center>&fГруппа Вконтакте: &evk.com/mediadestroy"
-  - "<center>&fОнлайн магазин: &emediadestroy.ru"
-  - "<center>&fНаш ТГ канал: &et.me/mediadestroy"
+# Строки с <...> - MiniMessage: <u> - подчёркнуто, <click:run_command:/link> - команда по клику,
+# <click:open_url:https://...> - ссылка.
+welcome:
+  # после РЕГИСТРАЦИИ (первый заход на сервер) - полностью, с предупреждением
+  register:
+    - ""
+    - "<center><#FFBB6B>DestroyCraft"
+    - "<center><gray>Добро пожаловать на сервер!"
+    - "<center><gray>Группа Вконтакте: <click:open_url:https://vk.com/game_ds><#FFBB6B>vk.com/game_ds</click>"
+    - "<center><gray>Онлайн магазин: <click:open_url:https://ds-craft.ru><#FFBB6B>ds-craft.ru</click>"
+    - "<center><gray>Наш ТГ канал: <click:open_url:https://t.me/dscraft><#FFBB6B>t.me/dscraft</click>"
+    - ""
+    - "<#FF9966>⚠ <#FFA83B><u>Ваш аккаунт уязвим!</u>"
+    - "<#FF9966>Привяжите его, чтобы избежать взлома!"
+    - "<#FF9966>Нажмите <click:run_command:/link><hover:show_text:'<gray>Посмотреть варианты'><u>сюда</u></hover></click> для просмотра вариантов (/link)."
+  # при обычном входе по паролю и по сессии - только верхний блок
+  login:
+    - ""
+    - "<center><#FFBB6B>DestroyCraft"
+    - "<center><gray>Добро пожаловать на сервер!"
+    - "<center><gray>Группа Вконтакте: <click:open_url:https://vk.com/game_ds><#FFBB6B>vk.com/game_ds</click>"
+    - "<center><gray>Онлайн магазин: <click:open_url:https://ds-craft.ru><#FFBB6B>ds-craft.ru</click>"
+    - "<center><gray>Наш ТГ канал: <click:open_url:https://t.me/dscraft><#FFBB6B>t.me/dscraft</click>"
