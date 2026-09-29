@@ -52,7 +52,7 @@ screen-register-confirm:
 
 register:
   # спрашивать пароль второй раз (защита от опечатки)
-  confirm-password: true
+  confirm-password: false
   min-length: 4
   max-length: 32
   bad-length-message: "&c&l[!] &cПароль должен быть от {min} до {max} символов."
