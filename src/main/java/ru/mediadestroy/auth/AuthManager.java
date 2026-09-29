@@ -192,7 +192,7 @@ public class AuthManager {
                         .replace("{min}", String.valueOf(min)).replace("{max}", String.valueOf(max)));
                 return true;
             }
-            if (cfg().getBoolean("register.confirm-password", false)) {
+            if (cfg().getBoolean("register.confirm-password", true)) {
                 session.pendingPassword = password;
                 sendTitle(player, cfg().getString("screen-register-confirm.title", ""),
                         cfg().getString("screen-register-confirm.subtitle", ""));

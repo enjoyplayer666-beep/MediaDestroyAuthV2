@@ -1,6 +1,3 @@
-# не менять вручную: по нему плагин обновляет старые настройки
-config-version: 2
-
 # ============================================
 #  MediaDestroyAuth — конфигурация
 #  Цветовые коды — стандартные Minecraft (&).
@@ -55,7 +52,7 @@ screen-register-confirm:
 
 register:
   # спрашивать пароль второй раз (защита от опечатки)
-  confirm-password: false
+  confirm-password: true
   min-length: 4
   max-length: 32
   bad-length-message: "&c&l[!] &cПароль должен быть от {min} до {max} символов."
