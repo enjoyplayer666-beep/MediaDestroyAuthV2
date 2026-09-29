@@ -16,6 +16,7 @@ public class MediaDestroyAuth extends JavaPlugin {
     @Override
     public void onEnable() {
         saveDefaultConfig();
+        migrateConfig();
 
         dataStore = new PlayerDataStore(getDataFolder(), getLogger());
         dataStore.load();
@@ -40,6 +41,15 @@ public class MediaDestroyAuth extends JavaPlugin {
             authManager.shutdown();
         }
         getLogger().info("MediaDestroyAuth выключен, данные сохранены.");
+    }
+
+    /** Обновляет старые конфиги на сервере: config-version 2 - пароль при регистрации вводится один раз. */
+    private void migrateConfig() {
+        if (getConfig().getInt("config-version", 1) < 2) {
+            getConfig().set("register.confirm-password", false);
+            getConfig().set("config-version", 2);
+            saveConfig();
+        }
     }
 
     public void reloadPluginConfig() {
