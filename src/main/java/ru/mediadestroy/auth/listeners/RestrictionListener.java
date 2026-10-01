@@ -39,7 +39,10 @@ public class RestrictionListener implements Listener {
         }
         event.setCancelled(true);
         String message = PlainTextComponentSerializer.plainText().serialize(event.message());
-        authManager.handlePasswordAttempt(player, message);
+        // чат асинхронный - пароль обрабатываем в основном потоке, как и /l
+        org.bukkit.Bukkit.getScheduler().runTask(
+                org.bukkit.Bukkit.getPluginManager().getPlugin("MediaDestroyAuth"),
+                () -> authManager.handlePasswordAttempt(player, message));
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
@@ -50,7 +53,8 @@ public class RestrictionListener implements Listener {
         }
         String msg = event.getMessage().toLowerCase(Locale.ROOT);
         boolean isAuthCommand = msg.startsWith("/l ") || msg.equals("/l")
-                || msg.startsWith("/login") || msg.startsWith("/log ") || msg.startsWith("/reg");
+                || msg.startsWith("/login") || msg.startsWith("/log ") || msg.startsWith("/reg")
+                || msg.startsWith("/register");
         if (!isAuthCommand) {
             event.setCancelled(true);
         }

@@ -9,14 +9,14 @@ commands:
   l:
     description: Регистрация или вход по паролю
     usage: /l <пароль>
-    aliases: [login, log, reg]
+    aliases: [login, log, reg, register]
   changepassword:
     description: Смена пароля
     usage: /changepassword <старый пароль> <новый пароль>
     aliases: [changepass, cp]
   mdauth:
     description: Служебные команды MediaDestroyAuth
-    usage: /mdauth reload
+    usage: /mdauth reload | /mdauth reset <ник>
     permission: mediadestroyauth.admin
     permission-message: Недостаточно прав.
 

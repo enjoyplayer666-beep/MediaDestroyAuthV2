@@ -178,10 +178,17 @@ public class AuthManager {
         if (session == null) {
             return false;
         }
-        String password = rawPassword.trim();
+        String raw = rawPassword.trim();
+        String password = PasswordUtil.normalize(raw);
         if (password.isEmpty()) {
             return true;
         }
+        // пока идёт "Проверка пароля" - повторные вводы не считаются (иначе путались регистрация и вход)
+        if (session.checking) {
+            return true;
+        }
+        // при регистрации "пароль пароль" сразу считается подтверждённым
+        boolean typedTwice = !raw.equals(password) && raw.split("\\s+").length == 2;
 
         // регистрация: проверка длины сразу, без экрана "Проверка пароля"
         if (session.registering && session.pendingPassword == null) {
@@ -192,7 +199,7 @@ public class AuthManager {
                         .replace("{min}", String.valueOf(min)).replace("{max}", String.valueOf(max)));
                 return true;
             }
-            if (cfg().getBoolean("register.confirm-password", true)) {
+            if (cfg().getBoolean("register.confirm-password", true) && !typedTwice) {
                 session.pendingPassword = password;
                 sendTitle(player, cfg().getString("screen-register-confirm.title", ""),
                         cfg().getString("screen-register-confirm.subtitle", ""));
@@ -202,6 +209,7 @@ public class AuthManager {
         }
 
         showScreenChecking(player);
+        session.checking = true;
 
         int delayTicks = cfg().getInt("timing.checking-title-ticks", 30);
         plugin.getServer().getScheduler().runTaskLater(plugin, () -> {
@@ -220,6 +228,7 @@ public class AuthManager {
         if (session == null) {
             return;
         }
+        session.checking = false;
 
         if (!dataStore.isRegistered(uuid)) {
             // повтор пароля при регистрации
@@ -416,6 +425,18 @@ public class AuthManager {
         }
     }
 
+    /** /mdauth reset ник - сбросить пароль: игрок заново регистрируется. */
+    public boolean resetPassword(UUID uuid) {
+        if (!dataStore.remove(uuid)) return false;
+        dataStore.save();
+        Player online = plugin.getServer().getPlayer(uuid);
+        if (online != null) {
+            cancelAuth(uuid);
+            startAuth(online);
+        }
+        return true;
+    }
+
     public Location getFreezeLocation(UUID uuid) {
         return frozenAt.get(uuid);
     }
@@ -442,6 +463,8 @@ public class AuthManager {
         final boolean registering;
         /** первый ввод пароля при регистрации, ждём повтор */
         String pendingPassword;
+        /** идёт проверка пароля - новые вводы не принимаются */
+        volatile boolean checking;
 
         AuthSession(BossBar bar, int secondsLeft, boolean registering) {
             this.bar = bar;

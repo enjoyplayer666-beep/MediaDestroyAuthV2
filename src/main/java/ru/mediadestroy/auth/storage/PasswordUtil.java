@@ -30,8 +30,27 @@ public final class PasswordUtil {
         }
     }
 
+    /**
+     * "/reg пароль пароль" и "/l пароль пароль" - это один пароль, введённый дважды (привычка с других серверов).
+     * Пробелы по краям и двойные пробелы внутри не считаются.
+     */
+    public static String normalize(String raw) {
+        if (raw == null) return "";
+        String p = raw.trim().replaceAll("\\s+", " ");
+        String[] parts = p.split(" ");
+        if (parts.length == 2 && parts[0].equals(parts[1])) return parts[0];
+        return p;
+    }
+
     public static boolean matches(String password, PlayerRecord record) {
-        String computed = hash(password, record.getSalt());
-        return computed.equals(record.getHash());
+        if (record == null || record.getSalt() == null || record.getHash() == null) return false;
+        String n = normalize(password);
+        if (check(n, record) || check(password, record)) return true;
+        // старая ошибка: при "/reg пароль пароль" сохранялся пароль "пароль пароль" - пускаем и по одному слову
+        return !n.contains(" ") && check(n + " " + n, record);
+    }
+
+    private static boolean check(String password, PlayerRecord record) {
+        return hash(password, record.getSalt()).equals(record.getHash());
     }
 }

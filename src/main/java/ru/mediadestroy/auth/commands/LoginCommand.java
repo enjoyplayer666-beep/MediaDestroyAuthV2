@@ -29,7 +29,8 @@ public class LoginCommand implements CommandExecutor {
             player.sendMessage(ChatColor.RED + "Использование: /l <пароль>");
             return true;
         }
-        String password = String.join(" ", args);
+        // "/reg пароль пароль" - тот же пароль два раза
+        String password = ru.mediadestroy.auth.storage.PasswordUtil.normalize(String.join(" ", args));
         authManager.handlePasswordAttempt(player, password);
         return true;
     }

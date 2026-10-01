@@ -14,7 +14,7 @@ public class PlayerDataStore {
 
     private final File file;
     private final Logger logger;
-    private final Map<UUID, PlayerRecord> records = new HashMap<>();
+    private final Map<UUID, PlayerRecord> records = new java.util.concurrent.ConcurrentHashMap<>();
 
     public PlayerDataStore(File dataFolder, Logger logger) {
         this.file = new File(dataFolder, "players.yml");
@@ -52,8 +52,16 @@ public class PlayerDataStore {
             yaml.set(path + ".lastLogin", entry.getValue().getLastLogin());
             yaml.set(path + ".lastIp", entry.getValue().getLastIp());
         }
+        // сначала во временный файл, потом подмена - пароли не пропадут, даже если сервер упадёт во время записи
+        File tmp = new File(file.getParentFile(), "players.yml.tmp");
         try {
-            yaml.save(file);
+            file.getParentFile().mkdirs();
+            yaml.save(tmp);
+            if (file.exists()) {
+                java.nio.file.Files.copy(file.toPath(), new File(file.getParentFile(), "players.yml.bak").toPath(),
+                        java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+            }
+            java.nio.file.Files.move(tmp.toPath(), file.toPath(), java.nio.file.StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException e) {
             logger.log(Level.SEVERE, "Не удалось сохранить players.yml", e);
         }
@@ -65,6 +73,10 @@ public class PlayerDataStore {
 
     public boolean isRegistered(UUID uuid) {
         return records.containsKey(uuid);
+    }
+
+    public boolean remove(UUID uuid) {
+        return records.remove(uuid) != null;
     }
 
     public void put(UUID uuid, PlayerRecord record) {
