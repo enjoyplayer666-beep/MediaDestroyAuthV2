@@ -27,4 +27,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: MediaDestroyAuth
-          path: target/mediadestroy-auth.jar
+          path: target/MediaDestroyAuth.jar

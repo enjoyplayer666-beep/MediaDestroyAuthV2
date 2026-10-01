@@ -2,7 +2,7 @@ name: MediaDestroyAuth
 version: '1.0.0'
 main: ru.mediadestroy.auth.MediaDestroyAuth
 api-version: '1.21'
-author: MediaDestroy
+author: loserwrld
 description: Авторизация/регистрация для сервера MediaDestroy
 
 commands:
