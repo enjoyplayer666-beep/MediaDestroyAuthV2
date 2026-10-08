@@ -97,7 +97,7 @@ welcome:
   # после РЕГИСТРАЦИИ (первый заход на сервер) - полностью, с предупреждением
   register:
     - ""
-    - "<center><#FFBB6B>DestroyCraft"
+    - "<center><#FFBB6B>Amaterasu"
     - "<center><gray>Добро пожаловать на сервер!"
     - "<center><gray>Группа Вконтакте: <click:open_url:https://vk.com/game_ds><#FFBB6B>vk.com/game_ds</click>"
     - "<center><gray>Онлайн магазин: <click:open_url:https://ds-craft.ru><#FFBB6B>ds-craft.ru</click>"
@@ -109,7 +109,7 @@ welcome:
   # при обычном входе по паролю и по сессии - только верхний блок
   login:
     - ""
-    - "<center><#FFBB6B>DestroyCraft"
+    - "<center><#FFBB6B>Amaterasu"
     - "<center><gray>Добро пожаловать на сервер!"
     - "<center><gray>Группа Вконтакте: <click:open_url:https://vk.com/game_ds><#FFBB6B>vk.com/game_ds</click>"
     - "<center><gray>Онлайн магазин: <click:open_url:https://ds-craft.ru><#FFBB6B>ds-craft.ru</click>"

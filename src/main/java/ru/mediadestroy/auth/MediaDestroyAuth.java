@@ -15,6 +15,7 @@ public class MediaDestroyAuth extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        Rebrand.apply(this);
         saveDefaultConfig();
 
         dataStore = new PlayerDataStore(getDataFolder(), getLogger());
